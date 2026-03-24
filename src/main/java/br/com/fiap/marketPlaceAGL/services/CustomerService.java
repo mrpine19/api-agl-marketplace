@@ -2,7 +2,6 @@ package br.com.fiap.marketPlaceAGL.services;
 
 import br.com.fiap.marketPlaceAGL.models.Customer;
 import br.com.fiap.marketPlaceAGL.repository.CustomerRepository;
-import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -30,16 +29,20 @@ public class CustomerService {
     }
 
     public Customer updateCustomer(long id, Customer newCustomer) {
-
-        Optional<Customer> customer = getCustomer(id);
-
-        checksIfCustomerExists(customer, id);
+        checksIfCustomerExists(id);
 
         newCustomer.setIdCliente(id);
         return addCustomer(newCustomer);
     }
 
-    private void checksIfCustomerExists(Optional<Customer> customer, long id) {
+    public void deleteCustomer(long id) {
+        checksIfCustomerExists(id);
+        customerRepository.deleteById(id);
+    }
+
+    private void checksIfCustomerExists(long id) {
+        Optional<Customer> customer = getCustomer(id);
+
         if (customer.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não encontrado o cliente com id " + id + " para ser atualizada");
     }
