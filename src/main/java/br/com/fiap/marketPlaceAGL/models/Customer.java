@@ -28,4 +28,7 @@ public class Customer {
 
     @Column(name = "cliente_ativo")
     private char clienteAtivo;
+
+    @OneToOne
+    private ShoppingCart shoppingCart;
 }
