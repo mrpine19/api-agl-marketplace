@@ -1,11 +1,14 @@
 package br.com.fiap.marketPlaceAGL.controllers;
 
+import br.com.fiap.marketPlaceAGL.dto.ShoppingCartDTO;
 import br.com.fiap.marketPlaceAGL.models.ShoppingCart;
 import br.com.fiap.marketPlaceAGL.services.ShoppingCartService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -13,11 +16,23 @@ import java.util.List;
 @RequestMapping("shoppingCart")
 public class ShoppingCartController {
 
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     @Autowired
     private ShoppingCartService shoppingCartService;
 
     @GetMapping
-    public List<ShoppingCart> getShoppingCartProducts(){
-        return shoppingCartService.getShoppingCartProducts();
+    public List<ShoppingCart> getShoppingCart(){
+        log.info("Buscando todos os carrinhos");
+        return shoppingCartService.getShoppingCart();
+    }
+
+    @PostMapping
+    public ResponseEntity<ShoppingCart> addShoppingCart(@RequestBody ShoppingCartDTO dto){
+        log.info("Adicionando um novo produto ao carrinho do cliente " + dto.getIdCustomer());
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(shoppingCartService.addShoppingCart(dto));
     }
 }

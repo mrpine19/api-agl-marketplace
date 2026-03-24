@@ -21,6 +21,7 @@ public class CustomerService {
     }
 
     public Optional<Customer> getCustomer(long id) {
+        checksIfCustomerExists(id);
         return customerRepository.findById(id);
     }
 
