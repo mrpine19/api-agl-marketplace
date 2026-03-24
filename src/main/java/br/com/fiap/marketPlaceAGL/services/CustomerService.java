@@ -2,6 +2,7 @@ package br.com.fiap.marketPlaceAGL.services;
 
 import br.com.fiap.marketPlaceAGL.models.Customer;
 import br.com.fiap.marketPlaceAGL.repository.CustomerRepository;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,5 +21,9 @@ public class CustomerService {
 
     public Optional<Customer> getCustomer(long id) {
         return customerRepository.findById(id);
+    }
+
+    public Customer addCustomer(Customer newCustomer) {
+        return customerRepository.save(newCustomer);
     }
 }

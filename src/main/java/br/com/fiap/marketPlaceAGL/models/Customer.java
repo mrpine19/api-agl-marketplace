@@ -9,7 +9,8 @@ import lombok.Data;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "customerSequence", sequenceName = "TB_AGL_CLIENTE_id_cliente_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customerSequence")
     @Column(name = "id_cliente")
     private long idCliente;
 
