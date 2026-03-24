@@ -3,18 +3,27 @@ package br.com.fiap.marketPlaceAGL.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Table(name="TB_AGL_CARRINHO")
 @Data
 public class ShoppingCart {
 
     @Id
-    @SequenceGenerator(name = "shoppingCartSequence", sequenceName = "TB_AGL_CLIENTE_id_cliente_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shoppingCartSequence")
     @Column(name = "id_carrinho")
     private long idCarrinho;
 
     @OneToOne
-    private Customer customers;
+    @JoinColumn(name = "id_cliente")
+    private Customer customer;
+
+    @ManyToMany
+    @JoinTable(
+            name = "TB_AGL_PRODUTOS_CARRINHO",
+            joinColumns = @JoinColumn(name = "id_carrinho"),
+            inverseJoinColumns = @JoinColumn(name = "id_produto")
+    )
+    private List<Product> products;
 
 }

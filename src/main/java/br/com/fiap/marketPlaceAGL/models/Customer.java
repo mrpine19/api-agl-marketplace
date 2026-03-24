@@ -29,6 +29,6 @@ public class Customer {
     @Column(name = "cliente_ativo")
     private char clienteAtivo;
 
-    @OneToOne
+    @OneToOne(mappedBy = "customer")
     private ShoppingCart shoppingCart;
 }
