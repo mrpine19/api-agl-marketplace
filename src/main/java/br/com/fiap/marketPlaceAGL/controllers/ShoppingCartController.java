@@ -36,4 +36,13 @@ public class ShoppingCartController {
                 .body(shoppingCartService.addItemShoppingCart(dto));
     }
 
+    @DeleteMapping
+    public ResponseEntity<ResultShoppingCartDTO> removeItemShoppingCart(@RequestBody ShoppingCartDTO dto){
+        log.info("Removendo o produto de id " + dto.getIdProduct() + " ao carrinho do cliente " + dto.getIdCustomer());
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(shoppingCartService.removeItemShoppingCart(dto));
+    }
+
 }

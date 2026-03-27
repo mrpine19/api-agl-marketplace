@@ -6,8 +6,11 @@ import br.com.fiap.marketPlaceAGL.models.Customer;
 import br.com.fiap.marketPlaceAGL.models.Product;
 import br.com.fiap.marketPlaceAGL.models.ShoppingCart;
 import br.com.fiap.marketPlaceAGL.repository.ShoppingCartRepository;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +60,22 @@ public class ShoppingCartService {
 
         ShoppingCart shoppingCart = getShoppingCartByCustomerId(dto.getIdCustomer());
         shoppingCart.getProducts().add(product.get());
+
+        shoppingCartRepository.save(shoppingCart);
+
+        return new ResultShoppingCartDTO(
+                shoppingCart.getIdCarrinho(),
+                shoppingCart.getCustomer().getIdCliente(),
+                shoppingCart.getProducts());
+    }
+
+    public ResultShoppingCartDTO removeItemShoppingCart(ShoppingCartDTO dto) {
+        ShoppingCart shoppingCart = getShoppingCartByCustomerId(dto.getIdCustomer());
+
+        boolean removed = shoppingCart.getProducts().removeIf(product -> product.getIdProduto() == dto.getIdProduct());
+
+        if(!removed)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Este produto não está no carrinho. Seu burro!");
 
         shoppingCartRepository.save(shoppingCart);
 
