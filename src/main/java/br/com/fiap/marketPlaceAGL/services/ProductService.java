@@ -25,23 +25,26 @@ public class ProductService {
     }
 
     public Optional<Product> getProductById(Long id){
-        return repository.findById(id);
+        Optional<Product> product = repository.findById(id);
+        checkIfProductExists(product);
+        return product;
     }
 
     public void deleteProduct(Long id) {
         var optionalProduct = getProductById(id);
-        if (optionalProduct.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
-        }
+        checkIfProductExists(optionalProduct);
         repository.deleteById(id);
     }
 
     public Product updateProduct(Long id, Product newProduct) {
         var optionalProduct = getProductById(id);
-        if (optionalProduct.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product e not found");
-        }
+        checkIfProductExists(optionalProduct);
         newProduct.setIdProduto(id);
         return repository.save(newProduct);
+    }
+
+    public void checkIfProductExists(Optional<Product> product){
+        if (product.isEmpty())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
     }
 }
