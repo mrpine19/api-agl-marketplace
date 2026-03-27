@@ -1,5 +1,6 @@
 package br.com.fiap.marketPlaceAGL.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -30,5 +31,6 @@ public class Customer {
     private char clienteAtivo;
 
     @OneToOne(mappedBy = "customer")
+    @JsonIgnore
     private ShoppingCart shoppingCart;
 }

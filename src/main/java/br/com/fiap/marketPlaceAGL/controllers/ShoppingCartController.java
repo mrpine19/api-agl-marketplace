@@ -1,7 +1,7 @@
 package br.com.fiap.marketPlaceAGL.controllers;
 
+import br.com.fiap.marketPlaceAGL.dto.ResultShoppingCartDTO;
 import br.com.fiap.marketPlaceAGL.dto.ShoppingCartDTO;
-import br.com.fiap.marketPlaceAGL.models.ShoppingCart;
 import br.com.fiap.marketPlaceAGL.services.ShoppingCartService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +22,13 @@ public class ShoppingCartController {
     private ShoppingCartService shoppingCartService;
 
     @GetMapping
-    public List<ShoppingCart> getShoppingCart(){
+    public List<ResultShoppingCartDTO> getShoppingCart(){
         log.info("Buscando todos os carrinhos");
         return shoppingCartService.getShoppingCart();
     }
 
     @PutMapping
-    public ResponseEntity<ShoppingCart> addItemShoppingCart(@RequestBody ShoppingCartDTO dto){
+    public ResponseEntity<ResultShoppingCartDTO> addItemShoppingCart(@RequestBody ShoppingCartDTO dto){
         log.info("Adicionando um novo produto ao carrinho do cliente " + dto.getIdCustomer());
 
         return ResponseEntity

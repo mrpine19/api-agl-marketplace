@@ -1,10 +1,7 @@
 package br.com.fiap.marketPlaceAGL.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,9 +12,6 @@ import java.util.List;
 @Getter
 @Setter
 
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "idCarrinho")
 public class ShoppingCart {
 
     @Id
@@ -44,10 +38,5 @@ public class ShoppingCart {
 
     public ShoppingCart(Customer customer) {
         this.customer = customer;
-    }
-
-    public ShoppingCart(Customer customer, List<Product> products) {
-        this.customer = customer;
-        this.products = products;
     }
 }
