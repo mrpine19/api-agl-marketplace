@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class ShoppingCartDTO {
-    private Long idCustomer;
+    private long idCustomer;
     private long idProduct;
 }

@@ -27,12 +27,13 @@ public class ShoppingCartController {
         return shoppingCartService.getShoppingCart();
     }
 
-    @PostMapping
-    public ResponseEntity<ShoppingCart> addShoppingCart(@RequestBody ShoppingCartDTO dto){
+    @PutMapping
+    public ResponseEntity<ShoppingCart> addItemShoppingCart(@RequestBody ShoppingCartDTO dto){
         log.info("Adicionando um novo produto ao carrinho do cliente " + dto.getIdCustomer());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(shoppingCartService.addShoppingCart(dto));
+                .body(shoppingCartService.addItemShoppingCart(dto));
     }
+
 }

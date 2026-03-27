@@ -1,6 +1,7 @@
 package br.com.fiap.marketPlaceAGL.services;
 
 import br.com.fiap.marketPlaceAGL.models.Customer;
+import br.com.fiap.marketPlaceAGL.models.ShoppingCart;
 import br.com.fiap.marketPlaceAGL.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,9 @@ public class CustomerService {
     @Autowired
     CustomerRepository customerRepository;
 
+    @Autowired
+    ShoppingCartService shoppingCartService;
+
     public List<Customer> getCustomers() {
         return customerRepository.findAll();
     }
@@ -26,7 +30,9 @@ public class CustomerService {
     }
 
     public Customer addCustomer(Customer newCustomer) {
-        return customerRepository.save(newCustomer);
+        customerRepository.save(newCustomer);
+        ShoppingCart shoppingCart = shoppingCartService.createShoppingCart(newCustomer);
+        return shoppingCart.getCustomer();
     }
 
     public Customer updateCustomer(long id, Customer newCustomer) {
