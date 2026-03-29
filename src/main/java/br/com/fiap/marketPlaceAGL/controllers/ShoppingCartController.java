@@ -22,9 +22,9 @@ public class ShoppingCartController {
     private ShoppingCartService shoppingCartService;
 
     @GetMapping
-    public List<ResultShoppingCartDTO> getShoppingCart(){
+    public List<ResultShoppingCartDTO> getAllShoppingCart(){
         log.info("Buscando todos os carrinhos");
-        return shoppingCartService.getShoppingCart();
+        return shoppingCartService.getAllShoppingCart();
     }
 
     @PutMapping
