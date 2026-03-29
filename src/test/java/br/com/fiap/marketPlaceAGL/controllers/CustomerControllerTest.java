@@ -2,13 +2,11 @@ package br.com.fiap.marketPlaceAGL.controllers;
 
 import br.com.fiap.marketPlaceAGL.models.Customer;
 import br.com.fiap.marketPlaceAGL.services.CustomerService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CustomerControllerTest {
 
     @Mock
-    private CustomerService customerService;
+    private CustomerService service;
 
     @InjectMocks
     private CustomerController controller;
@@ -34,14 +32,14 @@ class CustomerControllerTest {
         List<Customer> resultado = controller.getAllCustomers();
         assertNotNull(resultado);
         assertEquals(1, resultado.size());
-        Mockito.verify(customerService, Mockito.times(1)).getAllCustomers();
+        Mockito.verify(service, Mockito.times(1)).getAllCustomers();
     }
 
     @Test
     public void deveRetornarApenasUmCliente() {
         Customer clienteMock = new Customer();
         clienteMock.setIdCliente(1);
-        Mockito.when(customerService.getCustomerById(1)).thenReturn(clienteMock);
+        Mockito.when(service.getCustomerById(1)).thenReturn(clienteMock);
 
         ResponseEntity resultado = controller.getCustomer(1);
         assertNotNull(resultado);
@@ -52,7 +50,7 @@ class CustomerControllerTest {
     public void deveAdicionarUmCliente() {
         Customer clienteMock = new Customer();
         clienteMock.setIdCliente(1);
-        Mockito.when(customerService.addCustomer(clienteMock)).thenReturn(clienteMock);
+        Mockito.when(service.addCustomer(clienteMock)).thenReturn(clienteMock);
 
         ResponseEntity resultado = controller.addCliente(clienteMock);
         assertNotNull(resultado);
@@ -68,7 +66,7 @@ class CustomerControllerTest {
         Customer clienteAtualizado = new Customer();
         clienteAtualizado.setNomeCliente("Messi");
 
-        Mockito.when(customerService.updateCustomer(1, clienteAtualizado)).thenReturn(clienteAtualizado);
+        Mockito.when(service.updateCustomer(1, clienteAtualizado)).thenReturn(clienteAtualizado);
 
         ResponseEntity resultado = controller.updateCustomer(1, clienteAtualizado);
         assertNotNull(resultado);
