@@ -28,7 +28,7 @@ public class Customer {
     private String emailCliente;
 
     @Column(name = "cliente_ativo")
-    private char clienteAtivo;
+    private boolean clienteAtivo;
 
     @OneToOne(mappedBy = "customer")
     @JsonIgnore

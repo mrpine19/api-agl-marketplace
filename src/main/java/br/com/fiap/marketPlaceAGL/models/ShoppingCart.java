@@ -43,6 +43,10 @@ public class ShoppingCart {
     }
 
     public void addItemShoppingCart(Product product){
+        if (!product.isProdutoDisponivel()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Este produto não está disponível para ser adicionado ao carrinho.");
+        }
+
         products.add(product);
     }
 

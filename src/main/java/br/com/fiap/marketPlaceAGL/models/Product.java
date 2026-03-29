@@ -23,6 +23,6 @@ public class Product {
     private int quantidadeEstoque;
 
     @Column(name = "produto_disponivel")
-    private char produtoDisponivel;
+    private boolean produtoDisponivel;
 
 }

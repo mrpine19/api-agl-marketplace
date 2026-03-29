@@ -28,9 +28,10 @@ public class ProductService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
     }
 
-    public void deleteProduct(Long id) {
-        getProductById(id);
-        repository.deleteById(id);
+    public Product deleteProduct(Long id) {
+        Product product = getProductById(id);
+        product.setProdutoDisponivel(false);
+        return repository.save(product);
     }
 
     public Product updateProduct(Long id, Product newProduct) {
