@@ -21,17 +21,15 @@ public class CustomerController {
     CustomerService customerService;
 
     @GetMapping
-    public List<Customer> getCustomers(){
+    public List<Customer> getAllCustomers(){
         log.info("Buscando todos os clientes");
-        return customerService.getCustomers();
+        return customerService.getAllCustomers();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity getCustomer(@PathVariable("id") long id){
         log.info("Buscando cliente com id " + id);
-        return customerService.getCustomer(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(customerService.getCustomerById(id));
     }
 
     @PostMapping

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -20,13 +19,13 @@ public class CustomerService {
     @Autowired
     ShoppingCartService shoppingCartService;
 
-    public List<Customer> getCustomers() {
+    public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
     }
 
-    public Optional<Customer> getCustomer(long id) {
-        checksIfCustomerExists(id);
-        return customerRepository.findById(id);
+    public Customer getCustomerById(long id) {
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não encontrado o cliente com id " + id));
     }
 
     public Customer addCustomer(Customer newCustomer) {
@@ -36,21 +35,13 @@ public class CustomerService {
     }
 
     public Customer updateCustomer(long id, Customer newCustomer) {
-        checksIfCustomerExists(id);
-
+        getCustomerById(id);
         newCustomer.setIdCliente(id);
-        return addCustomer(newCustomer);
+        return customerRepository.save(newCustomer);
     }
 
     public void deleteCustomer(long id) {
-        checksIfCustomerExists(id);
-        customerRepository.deleteById(id);
-    }
-
-    private void checksIfCustomerExists(long id) {
-        Optional<Customer> customer = getCustomer(id);
-
-        if (customer.isEmpty())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não encontrado o cliente com id " + id + " para ser atualizada");
+        Customer customer = getCustomerById(id);
+        customerRepository.delete(customer);
     }
 }

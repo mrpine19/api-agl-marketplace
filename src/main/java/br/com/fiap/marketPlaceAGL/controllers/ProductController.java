@@ -21,17 +21,15 @@ public class ProductController {
     private ProductService service;
 
     @GetMapping
-    public List<Product> getProduct(){
+    public List<Product> getAllProducts(){
         log.info("Listing all products");
-        return service.getProduct();
+        return service.getAllProducts();
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id){
         log.info("Listing product with id: " + id);
-        return service.getProductById(id)
-                .map((m) -> ResponseEntity.ok(m))
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(service.getProductById(id));
     }
 
     @PostMapping
@@ -51,10 +49,9 @@ public class ProductController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id){
+    public ResponseEntity<Product> deleteProduct(@PathVariable Long id){
         log.info("Deleting product with id: " + id);
-        service.deleteProduct(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(service.deleteProduct(id));
     }
 
 }

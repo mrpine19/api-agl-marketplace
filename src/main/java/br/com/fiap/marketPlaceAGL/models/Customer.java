@@ -28,9 +28,9 @@ public class Customer {
     private String emailCliente;
 
     @Column(name = "cliente_ativo")
-    private char clienteAtivo;
+    private boolean clienteAtivo;
 
-    @OneToOne(mappedBy = "customer")
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private ShoppingCart shoppingCart;
 }
