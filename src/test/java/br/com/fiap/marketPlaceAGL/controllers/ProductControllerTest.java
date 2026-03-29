@@ -47,7 +47,7 @@ class ProductControllerTest {
     }
 
     @Test
-    public void deveAdicionarUmCliente() {
+    public void deveAdicionarUmProduto() {
         Product produtoMock = new Product();
         produtoMock.setIdProduto(1L);
         Mockito.when(service.addProduct(produtoMock)).thenReturn(produtoMock);
@@ -58,7 +58,7 @@ class ProductControllerTest {
     }
 
     @Test
-    public void deveAtualizarUmCliente() {
+    public void deveAtualizarUmProduto() {
         Product produtoOriginal = new Product();
         produtoOriginal.setIdProduto(1L);
         produtoOriginal.setPrecoProduto(54.99F);
@@ -78,7 +78,7 @@ class ProductControllerTest {
     }
 
     @Test
-    public void deveDeletarUmCliente() {
+    public void deveDeletarUmProduto() {
         Product produtoMock = new Product();
         produtoMock.setIdProduto(1L);
 
