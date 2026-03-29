@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -16,7 +15,7 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
-    public List<Product> getProduct(){
+    public List<Product> getAllProducts(){
         return repository.findAll();
     }
 
@@ -24,27 +23,20 @@ public class ProductService {
         return repository.save(product);
     }
 
-    public Optional<Product> getProductById(Long id){
-        Optional<Product> product = repository.findById(id);
-        checkIfProductExists(product);
-        return product;
+    public Product getProductById(Long id){
+        return repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
     }
 
-    public void deleteProduct(Long id) {
-        var optionalProduct = getProductById(id);
-        checkIfProductExists(optionalProduct);
-        repository.deleteById(id);
+    public Product deleteProduct(Long id) {
+        Product product = getProductById(id);
+        product.setProdutoDisponivel(false);
+        return repository.save(product);
     }
 
     public Product updateProduct(Long id, Product newProduct) {
-        var optionalProduct = getProductById(id);
-        checkIfProductExists(optionalProduct);
+        getProductById(id);
         newProduct.setIdProduto(id);
         return repository.save(newProduct);
-    }
-
-    public void checkIfProductExists(Optional<Product> product){
-        if (product.isEmpty())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
     }
 }

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -38,5 +40,20 @@ public class ShoppingCart {
 
     public ShoppingCart(Customer customer) {
         this.customer = customer;
+    }
+
+    public void addItemShoppingCart(Product product){
+        if (!product.isProdutoDisponivel()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Este produto não está disponível para ser adicionado ao carrinho.");
+        }
+
+        products.add(product);
+    }
+
+    public void removeItemShoppingCart(long idProduct){
+        boolean removed = products.removeIf(product -> product.getIdProduto().equals(idProduct));
+
+        if(!removed)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Este produto não está no carrinho. Seu burro!");
     }
 }
