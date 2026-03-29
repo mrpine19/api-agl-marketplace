@@ -30,7 +30,7 @@ public class Customer {
     @Column(name = "cliente_ativo")
     private boolean clienteAtivo;
 
-    @OneToOne(mappedBy = "customer")
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private ShoppingCart shoppingCart;
 }
