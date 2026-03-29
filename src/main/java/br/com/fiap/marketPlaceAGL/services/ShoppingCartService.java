@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ShoppingCartService {
@@ -40,10 +39,10 @@ public class ShoppingCartService {
     }
 
     public ResultShoppingCartDTO addItemShoppingCart(ShoppingCartDTO dto) {
-        Optional<Product> product = productService.getProductById(dto.getIdProduct());
+        Product product = productService.getProductById(dto.getIdProduct());
 
         ShoppingCart shoppingCart = getShoppingCartByCustomerId(dto.getIdCustomer());
-        shoppingCart.addItemShoppingCart(product.get());
+        shoppingCart.addItemShoppingCart(product);
 
         shoppingCartRepository.save(shoppingCart);
 
