@@ -25,25 +25,19 @@ public class ShoppingCartService {
     @Autowired
     private ProductService productService;
 
-    List<ResultShoppingCartDTO> listResultDTO;
-
     public List<ResultShoppingCartDTO> getShoppingCart() {
-        listResultDTO = new ArrayList<>();
-        List<ShoppingCart> shoppingCartList = shoppingCartRepository.findAll();
-
-        for (ShoppingCart shoppingCart : shoppingCartList){
-            converteDTO(shoppingCart);
-        }
-
-        return listResultDTO;
+        return shoppingCartRepository.findAll()
+                .stream()
+                .map(shoppingCart -> convertDTO(shoppingCart))
+                .toList();
     }
 
-    private void converteDTO(ShoppingCart shoppingCart) {
-        listResultDTO.add(new ResultShoppingCartDTO(
+    private ResultShoppingCartDTO convertDTO(ShoppingCart shoppingCart) {
+        return new ResultShoppingCartDTO(
                 shoppingCart.getIdCarrinho(),
                 shoppingCart.getCustomer().getIdCliente(),
                 shoppingCart.getProducts()
-        ));
+        );
     }
 
     public ShoppingCart getShoppingCartByCustomerId(long id){
