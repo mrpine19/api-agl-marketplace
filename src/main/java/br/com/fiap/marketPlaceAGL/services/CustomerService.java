@@ -2,7 +2,7 @@ package br.com.fiap.marketPlaceAGL.services;
 
 import br.com.fiap.marketPlaceAGL.models.Customer;
 import br.com.fiap.marketPlaceAGL.models.ShoppingCart;
-import br.com.fiap.marketPlaceAGL.projections.CustomerSummaryProjection;
+import br.com.fiap.marketPlaceAGL.projections.CustomerProjection;
 import br.com.fiap.marketPlaceAGL.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,6 +31,10 @@ public class CustomerService {
             return customerRepository.findByClienteAtivo(clienteAtivo, pageable);
 
         return customerRepository.findAll(pageable);
+    }
+
+    public Page<CustomerProjection> getCustomersByName(String nomeCliente, Pageable pageable) {
+        return customerRepository.findByNomeClienteContainingIgnoreCase(nomeCliente, pageable);
     }
 
     public Customer getCustomerById(long id) {

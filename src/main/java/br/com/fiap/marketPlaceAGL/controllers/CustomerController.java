@@ -1,7 +1,7 @@
 package br.com.fiap.marketPlaceAGL.controllers;
 
 import br.com.fiap.marketPlaceAGL.models.Customer;
-import br.com.fiap.marketPlaceAGL.projections.CustomerSummaryProjection;
+import br.com.fiap.marketPlaceAGL.projections.CustomerProjection;
 import br.com.fiap.marketPlaceAGL.services.CustomerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +28,12 @@ public class CustomerController {
             Pageable pageable) {
         log.info("Buscando clientes com paginação, ordenação e filtros: estadoCliente={}, clienteAtivo={}", estadoCliente, clienteAtivo);
         return customerService.getAllCustomers(estadoCliente, clienteAtivo, pageable);
+    }
+
+    @GetMapping("/search")
+    public Page<CustomerProjection> getCustomersByName(@RequestParam String nomeCliente, Pageable pageable){
+        log.info("Buscando clientes por nome com projection resumida");
+        return customerService.getCustomersByName(nomeCliente, pageable);
     }
 
     @GetMapping("/{id}")
