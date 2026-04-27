@@ -1,15 +1,16 @@
 package br.com.fiap.marketPlaceAGL.controllers;
 
 import br.com.fiap.marketPlaceAGL.models.Customer;
+import br.com.fiap.marketPlaceAGL.projections.CustomerSummaryProjection;
 import br.com.fiap.marketPlaceAGL.services.CustomerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("customers")
@@ -21,13 +22,16 @@ public class CustomerController {
     CustomerService customerService;
 
     @GetMapping
-    public List<Customer> getAllCustomers(){
-        log.info("Buscando todos os clientes");
-        return customerService.getAllCustomers();
+    public Page<Customer> getAllCustomers(
+            @RequestParam(required = false) String estadoCliente,
+            @RequestParam(required = false) Boolean clienteAtivo,
+            Pageable pageable) {
+        log.info("Buscando clientes com paginação, ordenação e filtros: estadoCliente={}, clienteAtivo={}", estadoCliente, clienteAtivo);
+        return customerService.getAllCustomers(estadoCliente, clienteAtivo, pageable);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getCustomer(@PathVariable("id") long id){
+    public ResponseEntity<Customer> getCustomer(@PathVariable("id") long id){
         log.info("Buscando cliente com id " + id);
         return ResponseEntity.ok(customerService.getCustomerById(id));
     }
