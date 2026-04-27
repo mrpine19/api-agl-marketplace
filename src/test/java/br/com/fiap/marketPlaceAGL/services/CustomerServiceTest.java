@@ -9,6 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -29,14 +33,51 @@ class CustomerServiceTest {
     private CustomerService service;
 
     @Test
-    public void deveRetornarTodosOsCliente() {
-        List<Customer> listaMock = List.of(new Customer());
-        Mockito.when(service.getAllCustomers()).thenReturn(listaMock);
+    public void deveRetornarTodosOsClientesSemFiltrosPaginado() {
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Customer> paginaMock = new PageImpl<>(List.of(new Customer()));
+        Mockito.when(repository.findAll(pageable)).thenReturn(paginaMock);
 
-        List<Customer> resultado = service.getAllCustomers();
+        Page<Customer> resultado = service.getAllCustomers(null, null, pageable);
         assertNotNull(resultado);
-        assertEquals(1, resultado.size());
-        Mockito.verify(repository, Mockito.times(1)).findAll();
+        assertEquals(1, resultado.getContent().size());
+        Mockito.verify(repository, Mockito.times(1)).findAll(pageable);
+    }
+    
+    @Test
+    public void deveRetornarClientesComFiltroDeEstado() {
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Customer> paginaMock = new PageImpl<>(List.of(new Customer()));
+        Mockito.when(repository.findByEstadoCliente("SP", pageable)).thenReturn(paginaMock);
+
+        Page<Customer> resultado = service.getAllCustomers("SP", null, pageable);
+        assertNotNull(resultado);
+        assertEquals(1, resultado.getContent().size());
+        Mockito.verify(repository, Mockito.times(1)).findByEstadoCliente("SP", pageable);
+    }
+    
+    @Test
+    public void deveRetornarClientesComFiltroDeStatus() {
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Customer> paginaMock = new PageImpl<>(List.of(new Customer()));
+        Mockito.when(repository.findByClienteAtivo(true, pageable)).thenReturn(paginaMock);
+
+        Page<Customer> resultado = service.getAllCustomers(null, true, pageable);
+        assertNotNull(resultado);
+        assertEquals(1, resultado.getContent().size());
+        Mockito.verify(repository, Mockito.times(1)).findByClienteAtivo(true, pageable);
+    }
+
+    @Test
+    public void deveRetornarClientesComAmbosFiltros() {
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Customer> paginaMock = new PageImpl<>(List.of(new Customer()));
+        Mockito.when(repository.findByEstadoClienteAndClienteAtivo("SP", true, pageable)).thenReturn(paginaMock);
+
+        Page<Customer> resultado = service.getAllCustomers("SP", true, pageable);
+        assertNotNull(resultado);
+        assertEquals(1, resultado.getContent().size());
+        Mockito.verify(repository, Mockito.times(1)).findByEstadoClienteAndClienteAtivo("SP", true, pageable);
     }
 
     @Test
