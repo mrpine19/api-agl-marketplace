@@ -1,14 +1,18 @@
 package br.com.fiap.marketPlaceAGL.repository;
 
-import br.com.fiap.marketPlaceAGL.models.ShoppingCart;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import br.com.fiap.marketPlaceAGL.models.ShoppingCart;
 
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long> {
 
-    @Query("SELECT sc FROM ShoppingCart sc WHERE sc.customer.idCliente = ?1")
-    Optional<ShoppingCart> getShoppingCartByCustomerId (long id);
+    Optional<ShoppingCart> findByCustomerIdCliente(long id);
+
+    Page<ShoppingCart> findByProductsIdProduto(long id, Pageable pageable);
 
 }
+ 
