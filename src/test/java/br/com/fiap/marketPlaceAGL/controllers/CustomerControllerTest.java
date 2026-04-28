@@ -1,5 +1,6 @@
 package br.com.fiap.marketPlaceAGL.controllers;
 
+import br.com.fiap.marketPlaceAGL.dto.CustomerRequest;
 import br.com.fiap.marketPlaceAGL.models.Customer;
 import br.com.fiap.marketPlaceAGL.services.CustomerService;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 
@@ -58,11 +60,12 @@ class CustomerControllerTest {
 
     @Test
     public void deveAdicionarUmCliente() {
+        CustomerRequest requestMock = new CustomerRequest("Neymar", "SP", "11999999999", "neymar@psg.com", true);
         Customer clienteMock = new Customer();
         clienteMock.setIdCliente(1);
-        Mockito.when(service.addCustomer(clienteMock)).thenReturn(clienteMock);
+        Mockito.when(service.addCustomer(any(Customer.class))).thenReturn(clienteMock);
 
-        ResponseEntity<Customer> resultado = controller.addCliente(clienteMock);
+        ResponseEntity<Customer> resultado = controller.addCliente(requestMock);
         assertNotNull(resultado);
         assertEquals(HttpStatus.CREATED, resultado.getStatusCode());
         assertNotNull(resultado.getBody());
