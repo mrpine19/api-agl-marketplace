@@ -35,6 +35,12 @@ public class ProductController {
         return service.findProductById(id, pageable);
     }
 
+    @GetMapping(params = "precoProduto")
+    public Page<Product> getProductByPrecoProdutoLessThanEqual(@RequestParam float precoProduto, Pageable pageable){
+        log.info("Listing product with preco less than equal: " + precoProduto);
+        return service.findByPrecoProdutoMenorQue(precoProduto, pageable);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product addProduct(@RequestBody @Valid ProductRequest product){
