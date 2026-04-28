@@ -33,10 +33,18 @@ public class ProductService {
         return repository.findProductByIdProduto(id, pageable);
     }
 
-    public Product deleteProduct(Long id) {
+    public Page<Product> findByPrecoProdutoMenorQue(float precoProduto, Pageable pageable){
+        return repository.findByPrecoProdutoLessThanEqual(precoProduto, pageable);
+    }
+
+    public Page<Product> findByProdutoDisponivel(boolean produtoDisponivel, Pageable pageable){
+        return repository.findByProdutoDisponivel(produtoDisponivel, pageable);
+    }
+
+    public void deleteProduct(Long id) {
         Product product = getProductById(id);
         product.setProdutoDisponivel(false);
-        return repository.save(product);
+        repository.save(product);
     }
 
     public Product updateProduct(Long id, Product newProduct) {
