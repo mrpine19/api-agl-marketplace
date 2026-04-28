@@ -59,6 +59,14 @@ A arquitetura segue o padrão de camadas do Spring para garantir separação de 
 - `GET /shoppingCart` - Lista os carrinhos de compras e seus produtos.
 - `PUT /shoppingCart` - Adição de itens ao carrinho.
 
+### Json de teste para adicionar produto ao carrinho
+```json
+{
+   "idCustomer": "ID_DO_CLIENTE",
+   "idProduct": "ID_DO_PRODUTO"
+}
+```
+
 ### 📦 Produtos (`/products`)
 - `GET /products` - Lista todos os produtos.
 - `GET /products/{id}` - Busca um produto pelo ID.
@@ -66,6 +74,15 @@ A arquitetura segue o padrão de camadas do Spring para garantir separação de 
 - `PUT /products/{id}` - Atualiza as informações de um produto existente.
 - `DELETE /products/{id}` - Realiza o "Soft Delete" de um produto (Muda o status `produtoDisponivel` para inativo, preservando o histórico).
 
+### Json de teste para Product
+```json
+        {
+   "nomeProduto": "Teclado Aula 108F PRO",
+   "precoProduto": 780.0,
+   "quantidadeEstoque": 150,
+   "produtoDisponivel": true
+}
+```
 ---
 
 ## 🗄️ Modelagem do Banco de Dados
