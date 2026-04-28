@@ -37,6 +37,10 @@ public class ProductService {
         return repository.findByPrecoProdutoLessThanEqual(precoProduto, pageable);
     }
 
+    public Page<Product> findByProdutoDisponivel(boolean produtoDisponivel, Pageable pageable){
+        return repository.findByProdutoDisponivel(produtoDisponivel, pageable);
+    }
+
     public void deleteProduct(Long id) {
         Product product = getProductById(id);
         product.setProdutoDisponivel(false);

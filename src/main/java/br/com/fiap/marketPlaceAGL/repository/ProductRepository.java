@@ -9,5 +9,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Page<Product> findProductByIdProduto(Long id, Pageable pageable);
     Page<Product> findByPrecoProdutoLessThanEqual(float precoProduto, Pageable pageable);
+    Page<Product> findByProdutoDisponivel(boolean produtoDisponivel, Pageable pageable);
 
 }

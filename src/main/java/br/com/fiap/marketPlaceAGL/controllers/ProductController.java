@@ -41,6 +41,12 @@ public class ProductController {
         return service.findByPrecoProdutoMenorQue(precoProduto, pageable);
     }
 
+    @GetMapping(params = "produtoDisponivel")
+    public Page<Product> getProductByprodutoDisponivel(@RequestParam boolean produtoDisponivel, Pageable pageable){
+        log.info("Listing " + produtoDisponivel + " product ");
+        return service.findByProdutoDisponivel(produtoDisponivel, pageable);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product addProduct(@RequestBody @Valid ProductRequest product){
