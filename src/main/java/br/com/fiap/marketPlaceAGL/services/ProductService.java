@@ -2,21 +2,22 @@ package br.com.fiap.marketPlaceAGL.services;
 
 import br.com.fiap.marketPlaceAGL.models.Product;
 import br.com.fiap.marketPlaceAGL.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
-    @Autowired
-    private ProductRepository repository;
+    private final ProductRepository repository;
 
-    public List<Product> getAllProducts(){
-        return repository.findAll();
+    public Page<Product> findAllProducts(Pageable pageable){
+        return repository.findAll(pageable);
     }
 
     public Product addProduct(Product product){
@@ -28,10 +29,22 @@ public class ProductService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
     }
 
-    public Product deleteProduct(Long id) {
+    public Page<Product> findProductById(Long id, Pageable pageable){
+        return repository.findProductByIdProduto(id, pageable);
+    }
+
+    public Page<Product> findByPrecoProdutoMenorQue(float precoProduto, Pageable pageable){
+        return repository.findByPrecoProdutoLessThanEqual(precoProduto, pageable);
+    }
+
+    public Page<Product> findByProdutoDisponivel(boolean produtoDisponivel, Pageable pageable){
+        return repository.findByProdutoDisponivel(produtoDisponivel, pageable);
+    }
+
+    public void deleteProduct(Long id) {
         Product product = getProductById(id);
         product.setProdutoDisponivel(false);
-        return repository.save(product);
+        repository.save(product);
     }
 
     public Product updateProduct(Long id, Product newProduct) {

@@ -38,14 +38,34 @@ A arquitetura segue o padrão de camadas do Spring para garantir separação de 
 
 ### 👥 Clientes (`/customers`)
 - `GET /customers` - Lista todos os clientes.
+- `GET /customers/search` - Busca clientes por nome com projection resumida.
 - `GET /customers/{id}` - Busca um cliente pelo ID.
 - `POST /customers` - Cadastra um novo cliente (Cria automaticamente um carrinho de compras atrelado a ele).
 - `PUT /customers/{id}` - Atualiza as informações de um cliente existente.
 - `DELETE /customers/{id}` - Deleta um cliente (e seu carrinho de compras em cascata).
 
+### Json de teste para Customer
+```json
+{
+  "nomeCliente": "Neymar Júnior",
+  "estadoCliente": "SP",
+  "telefoneCliente": "(11) 91234-5678",
+  "emailCliente": "neymarjr@santos.com",
+  "clienteAtivo": true
+}
+```
+
 ### 🛒 Carrinho de Compras (`/shoppingCart`)
 - `GET /shoppingCart` - Lista os carrinhos de compras e seus produtos.
 - `PUT /shoppingCart` - Adição de itens ao carrinho.
+
+### Json de teste para adicionar produto ao carrinho
+```json
+{
+   "idCustomer": "ID_DO_CLIENTE",
+   "idProduct": "ID_DO_PRODUTO"
+}
+```
 
 ### 📦 Produtos (`/products`)
 - `GET /products` - Lista todos os produtos.
@@ -54,6 +74,15 @@ A arquitetura segue o padrão de camadas do Spring para garantir separação de 
 - `PUT /products/{id}` - Atualiza as informações de um produto existente.
 - `DELETE /products/{id}` - Realiza o "Soft Delete" de um produto (Muda o status `produtoDisponivel` para inativo, preservando o histórico).
 
+### Json de teste para Product
+```json
+{
+   "nomeProduto": "Teclado Aula 108F PRO",
+   "precoProduto": 780.0,
+   "quantidadeEstoque": 150,
+   "produtoDisponivel": true
+}
+```
 ---
 
 ## 🗄️ Modelagem do Banco de Dados
