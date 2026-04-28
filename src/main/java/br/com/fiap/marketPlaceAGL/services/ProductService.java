@@ -33,10 +33,10 @@ public class ProductService {
         return repository.findProductByIdProduto(id, pageable);
     }
 
-    public Product deleteProduct(Long id) {
+    public void deleteProduct(Long id) {
         Product product = getProductById(id);
         product.setProdutoDisponivel(false);
-        return repository.save(product);
+        repository.save(product);
     }
 
     public Product updateProduct(Long id, Product newProduct) {
