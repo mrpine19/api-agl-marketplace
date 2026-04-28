@@ -38,10 +38,22 @@ A arquitetura segue o padrão de camadas do Spring para garantir separação de 
 
 ### 👥 Clientes (`/customers`)
 - `GET /customers` - Lista todos os clientes.
+- `GET /customers/search` - Busca clientes por nome com projection resumida.
 - `GET /customers/{id}` - Busca um cliente pelo ID.
 - `POST /customers` - Cadastra um novo cliente (Cria automaticamente um carrinho de compras atrelado a ele).
 - `PUT /customers/{id}` - Atualiza as informações de um cliente existente.
 - `DELETE /customers/{id}` - Deleta um cliente (e seu carrinho de compras em cascata).
+
+### Json de teste para Customer
+```json
+{
+  "nomeCliente": "Neymar Júnior",
+  "estadoCliente": "SP",
+  "telefoneCliente": "(11) 91234-5678",
+  "emailCliente": "neymarjr@santos.com",
+  "clienteAtivo": true
+}
+```
 
 ### 🛒 Carrinho de Compras (`/shoppingCart`)
 - `GET /shoppingCart` - Lista os carrinhos de compras e seus produtos.
