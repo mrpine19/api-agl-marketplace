@@ -29,6 +29,10 @@ public class ProductService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
     }
 
+    public Page<Product> findProductById(Long id, Pageable pageable){
+        return repository.findProductByIdProduto(id, pageable);
+    }
+
     public Product deleteProduct(Long id) {
         Product product = getProductById(id);
         product.setProdutoDisponivel(false);

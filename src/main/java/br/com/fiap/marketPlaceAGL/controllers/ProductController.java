@@ -1,7 +1,9 @@
 package br.com.fiap.marketPlaceAGL.controllers;
 
+import br.com.fiap.marketPlaceAGL.dto.ProductRequest;
 import br.com.fiap.marketPlaceAGL.models.Product;
 import br.com.fiap.marketPlaceAGL.services.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,18 +30,16 @@ public class ProductController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id){
+    public Page<Product> getProductById(@PathVariable Long id, Pageable pageable){
         log.info("Listing product with id: " + id);
-        return ResponseEntity.ok(service.getProductById(id));
+        return service.findProductById(id, pageable);
     }
 
     @PostMapping
-    public ResponseEntity<Product> addProduct(@RequestBody Product product){
+    @ResponseStatus(HttpStatus.CREATED)
+    public Product addProduct(@RequestBody @Valid ProductRequest product){
         log.info("Registering product: " + product);
-        var newProduct = service.addProduct(product);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(newProduct);
+        return service.addProduct(product.toEntity());
     }
 
     @PutMapping("{id}")
