@@ -1,8 +1,10 @@
 package br.com.fiap.marketPlaceAGL.controllers;
 
+import br.com.fiap.marketPlaceAGL.dto.CustomerRequest;
 import br.com.fiap.marketPlaceAGL.models.Customer;
 import br.com.fiap.marketPlaceAGL.projections.CustomerProjection;
 import br.com.fiap.marketPlaceAGL.services.CustomerService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,12 +45,12 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<Customer> addCliente (@RequestBody Customer newCustomer){
+    public ResponseEntity<Customer> addCliente (@RequestBody @Valid CustomerRequest newCustomer){
         log.info("Adicionando um novo cliente");
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(customerService.addCustomer(newCustomer));
+                .body(customerService.addCustomer(newCustomer.toEntity()));
     }
 
     @PutMapping("/{id}")
