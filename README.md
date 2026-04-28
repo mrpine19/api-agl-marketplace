@@ -76,7 +76,7 @@ A arquitetura segue o padrão de camadas do Spring para garantir separação de 
 
 ### Json de teste para Product
 ```json
-        {
+{
    "nomeProduto": "Teclado Aula 108F PRO",
    "precoProduto": 780.0,
    "quantidadeEstoque": 150,
