@@ -1,25 +1,36 @@
 package br.com.fiap.marketPlaceAGL.controllers;
 
-import br.com.fiap.marketPlaceAGL.dto.ResultShoppingCartDTO;
-import br.com.fiap.marketPlaceAGL.dto.ShoppingCartDTO;
-import br.com.fiap.marketPlaceAGL.services.ShoppingCartService;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import br.com.fiap.marketPlaceAGL.dto.ResultShoppingCartDTO;
+import br.com.fiap.marketPlaceAGL.dto.ShoppingCartDTO;
+import br.com.fiap.marketPlaceAGL.models.ShoppingCart;
+import br.com.fiap.marketPlaceAGL.services.ShoppingCartService;
 
 @RestController
 @RequestMapping("shoppingCart")
 public class ShoppingCartController {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
+    private final ShoppingCartService shoppingCartService;
 
-    @Autowired
-    private ShoppingCartService shoppingCartService;
+    public ShoppingCartController(ShoppingCartService shoppingCartService) {
+        this.shoppingCartService = shoppingCartService;
+    }
 
     @GetMapping
     public List<ResultShoppingCartDTO> getAllShoppingCart(){
@@ -44,5 +55,13 @@ public class ShoppingCartController {
                 .status(HttpStatus.CREATED)
                 .body(shoppingCartService.removeItemShoppingCart(dto));
     }
+
+    @GetMapping("products/{productId}")
+    public Page<ShoppingCart> findByIdProduto(@PathVariable Long productId, Pageable pageable){
+        log.info("Buscando todos os carrinhos que contêm o produto de Id " + productId);
+
+        return shoppingCartService.findByIdProduto(productId, pageable);
+    }
+
 
 }

@@ -7,6 +7,8 @@ import br.com.fiap.marketPlaceAGL.models.Product;
 import br.com.fiap.marketPlaceAGL.models.ShoppingCart;
 import br.com.fiap.marketPlaceAGL.repository.ShoppingCartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -30,7 +32,7 @@ public class ShoppingCartService {
     }
 
     public ShoppingCart getShoppingCartByCustomerId(long id){
-        return shoppingCartRepository.getShoppingCartByCustomerId(id)
+        return shoppingCartRepository.findByCustomerIdCliente(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Shopping cart not found"));
     }
 
@@ -66,4 +68,9 @@ public class ShoppingCartService {
                 shoppingCart.getProducts()
         );
     }
+
+    public Page<ShoppingCart> findByIdProduto(long idProduct, Pageable pageable) {
+        return shoppingCartRepository.findByProductsIdProduto(idProduct, pageable);
+    }
 }
+
