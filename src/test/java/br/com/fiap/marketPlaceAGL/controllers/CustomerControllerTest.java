@@ -1,5 +1,6 @@
 package br.com.fiap.marketPlaceAGL.controllers;
 
+import br.com.fiap.marketPlaceAGL.dto.CustomerRequest;
 import br.com.fiap.marketPlaceAGL.models.Customer;
 import br.com.fiap.marketPlaceAGL.services.CustomerService;
 import org.junit.jupiter.api.Test;
@@ -8,12 +9,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 
 @ExtendWith(MockitoExtension.class)
 class CustomerControllerTest {
@@ -25,14 +33,16 @@ class CustomerControllerTest {
     private CustomerController controller;
 
     @Test
-    public void deveRetornarTodosOsClientes() {
-        List<Customer> listaMock = List.of(new Customer());
-        Mockito.when(controller.getAllCustomers()).thenReturn(listaMock);
+    public void deveRetornarTodosOsClientesPaginados() {
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Customer> paginaMock = new PageImpl<>(List.of(new Customer()));
+        Mockito.when(service.getAllCustomers(isNull(), isNull(), eq(pageable))).thenReturn(paginaMock);
 
-        List<Customer> resultado = controller.getAllCustomers();
+        Page<Customer> resultado = controller.getAllCustomers(null, null, pageable);
+        
         assertNotNull(resultado);
-        assertEquals(1, resultado.size());
-        Mockito.verify(service, Mockito.times(1)).getAllCustomers();
+        assertEquals(1, resultado.getContent().size());
+        Mockito.verify(service, Mockito.times(1)).getAllCustomers(isNull(), isNull(), eq(pageable));
     }
 
     @Test
@@ -41,20 +51,25 @@ class CustomerControllerTest {
         clienteMock.setIdCliente(1);
         Mockito.when(service.getCustomerById(1)).thenReturn(clienteMock);
 
-        ResponseEntity resultado = controller.getCustomer(1);
+        ResponseEntity<Customer> resultado = controller.getCustomer(1);
         assertNotNull(resultado);
         assertEquals(HttpStatus.OK, resultado.getStatusCode());
+        assertNotNull(resultado.getBody());
+        assertEquals(1, resultado.getBody().getIdCliente());
     }
 
     @Test
     public void deveAdicionarUmCliente() {
+        CustomerRequest requestMock = new CustomerRequest("Neymar", "SP", "11999999999", "neymar@psg.com", true);
         Customer clienteMock = new Customer();
         clienteMock.setIdCliente(1);
-        Mockito.when(service.addCustomer(clienteMock)).thenReturn(clienteMock);
+        Mockito.when(service.addCustomer(any(Customer.class))).thenReturn(clienteMock);
 
-        ResponseEntity resultado = controller.addCliente(clienteMock);
+        ResponseEntity<Customer> resultado = controller.addCliente(requestMock);
         assertNotNull(resultado);
         assertEquals(HttpStatus.CREATED, resultado.getStatusCode());
+        assertNotNull(resultado.getBody());
+        assertEquals(1, resultado.getBody().getIdCliente());
     }
 
     @Test
@@ -68,11 +83,12 @@ class CustomerControllerTest {
 
         Mockito.when(service.updateCustomer(1, clienteAtualizado)).thenReturn(clienteAtualizado);
 
-        ResponseEntity resultado = controller.updateCustomer(1, clienteAtualizado);
+        ResponseEntity<Customer> resultado = controller.updateCustomer(1, clienteAtualizado);
         assertNotNull(resultado);
         assertEquals(HttpStatus.OK, resultado.getStatusCode());
 
-        Customer body = (Customer) resultado.getBody();
+        Customer body = resultado.getBody();
+        assertNotNull(body);
         assertNotEquals("Neymar", body.getNomeCliente());
         assertEquals("Messi", body.getNomeCliente());
     }
@@ -82,9 +98,10 @@ class CustomerControllerTest {
         Customer clienteMock = new Customer();
         clienteMock.setIdCliente(1);
 
-        ResponseEntity resultado = controller.deleteCustomer(1);
+        ResponseEntity<Void> resultado = controller.deleteCustomer(1);
         assertNotNull(resultado);
         assertEquals(HttpStatus.NO_CONTENT, resultado.getStatusCode());
+        Mockito.verify(service, Mockito.times(1)).deleteCustomer(1);
     }
 
 }
